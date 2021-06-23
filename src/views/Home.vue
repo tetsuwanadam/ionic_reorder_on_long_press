@@ -2,67 +2,97 @@
   <ion-page>
     <ion-header :translucent="true">
       <ion-toolbar>
-        <ion-title>Blank</ion-title>
+        <ion-title>Ionic Reorder on Long Press</ion-title>
       </ion-toolbar>
     </ion-header>
     
     <ion-content :fullscreen="true">
       <ion-header collapse="condense">
         <ion-toolbar>
-          <ion-title size="large">Blank</ion-title>
+          <ion-title size="large">Ionic Reorder on Long Press</ion-title>
         </ion-toolbar>
       </ion-header>
     
-      <div id="container">
-        <strong>Ready to create an app?</strong>
-        <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-      </div>
+      <ion-list>
+        <ion-reorder-group @ionItemReorder="reorder($event)" :disabled="reorderIsDisabled">
+          <ion-item-sliding>
+            <ion-item-options side="start">
+              <ion-item-option>Button</ion-item-option>
+            </ion-item-options>
+
+            <ion-item>
+              <ion-reorder slot="start"></ion-reorder>
+              <ion-label>Item 1</ion-label>
+            </ion-item>
+          </ion-item-sliding>
+
+          <ion-item-sliding>
+            <ion-item-options side="start">
+              <ion-item-option>Button</ion-item-option>
+            </ion-item-options>
+
+            <ion-reorder>
+              <ion-item>
+                <ion-label>Item 2</ion-label>
+              </ion-item>
+            </ion-reorder>
+          </ion-item-sliding>
+
+          <ion-item-sliding>
+            <ion-item-options side="start">
+              <ion-item-option>Button</ion-item-option>
+            </ion-item-options>
+
+            <ion-item>
+              <ion-reorder slot="start"></ion-reorder>
+              <ion-label>Item 3</ion-label>
+            </ion-item>
+          </ion-item-sliding>
+        </ion-reorder-group>
+      </ion-list>
+
+      <p>
+        <ion-button @click="reorderIsDisabled = !reorderIsDisabled" size="small">Toggle</ion-button>
+        Reorder is {{ (reorderIsDisabled) ? 'disabled' : 'enabled' }}
+      </p>
     </ion-content>
   </ion-page>
 </template>
 
-<script lang="ts">
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
-import { defineComponent } from 'vue';
+<script>
+import { IonButton, IonContent, IonHeader, IonItem, IonItemSliding, IonPage, IonReorder, IonReorderGroup, IonTitle, IonToolbar } from '@ionic/vue';
+import { defineComponent, ref } from 'vue';
 
 export default defineComponent({
   name: 'Home',
   components: {
+    IonButton,
     IonContent,
     IonHeader,
+    IonItem,
+    IonItemSliding,
     IonPage,
+    IonReorder,
+    IonReorderGroup,
     IonTitle,
-    IonToolbar
-  }
+    IonToolbar,
+  },
+  setup: function() {
+    const reorder = function(event) {
+      console.log('reorder event is:', event);
+      event.detail.complete();
+    };
+
+    const reorderIsDisabled = ref(false);
+
+    return {
+      reorder,
+      reorderIsDisabled,
+    };
+  },
 });
 </script>
 
 <style scoped>
-#container {
-  text-align: center;
-  
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
-}
 
-#container strong {
-  font-size: 20px;
-  line-height: 26px;
-}
-
-#container p {
-  font-size: 16px;
-  line-height: 22px;
-  
-  color: #8c8c8c;
-  
-  margin: 0;
-}
-
-#container a {
-  text-decoration: none;
-}
 </style>
